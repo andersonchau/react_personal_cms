@@ -75,3 +75,20 @@ export interface ContentResultDisplayItemUIWrapper {
     data : ContentResultDisplayItem,
     onDetailsClick: (id: string) => void;
 }
+
+export interface IFormInputResource {
+    title : string;  
+    description : string;
+    resourceId: number;
+    resourceType: string;
+    detailsText : string;
+    hashTagList : number[];
+    resourceFolders : string[];
+    key: number;
+    
+};
+
+export interface ContentCreateResponse{
+    acknowledged : boolean,
+    insertedId : string
+}

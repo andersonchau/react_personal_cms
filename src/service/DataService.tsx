@@ -1,10 +1,34 @@
-import { HashTagSearchReq,HashTagSearchResp,HashTagDetails,HashTagUpdateResp, ContentSearchReq,ContentSearchResp } from '../interfaces/AppInterface';
+import { HashTagSearchReq,HashTagSearchResp,HashTagDetails,HashTagUpdateResp, ContentSearchReq,ContentSearchResp, IFormInputResource , ContentCreateResponse } from '../interfaces/AppInterface';
 import axios from 'axios';
 
 let SERVER_API_ENDPOINT = "http://localhost:5050";
 
 
 export const DataService = {
+    //
+    createContent: function(req: IFormInputResource) : Promise<ContentCreateResponse>{
+        return new Promise<ContentCreateResponse>((resolve, reject) => {
+        const url = SERVER_API_ENDPOINT + "/record/create"; // Replace with your server URL    
+            fetch(url, {
+                method: 'PUT', // Use 'GET' for a GET request
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(req), // Include JSON body
+              }) .then((response) => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Parse JSON response
+              })
+              .then((result) => {
+                resolve(result.data);
+              })
+              .catch((err) => {
+                reject('API Error');
+              });
+            }); 
+    }, 
     seachContent: function (req: ContentSearchReq ) : Promise<ContentSearchResp[]>{
         
         return new Promise<ContentSearchResp[]>((resolve, reject) => {

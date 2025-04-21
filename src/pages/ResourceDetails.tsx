@@ -19,39 +19,45 @@
   import Box from '@mui/material/Box';
   import InputLabel from '@mui/material/InputLabel';
   import TextareaAutosize from '@mui/material/TextareaAutosize';
+  import { IFormInputResource , ContentCreateResponse } from '../interfaces/AppInterface';
+import {DataService} from '../service/DataService';
   type ResourceDetailsProps = {
       mode: string;
       detailsId: number;
   };
 
-  interface IFormInput {
-      title : string;  
-      description : string;
-      resourceId: number;
-      resourceType: string;
-      detailsText : string;
-      hashTagList : number[];
-      resourceFolders : string[];
-      
-      
-  };
 
-  const defaultValues : IFormInput = {
+  const defaultValues : IFormInputResource = {
       title : "",  
       description : "",
-      resourceType : "",
+      resourceType : "text",
       resourceId : -1,
       detailsText : "",
       hashTagList : [],
       resourceFolders : [],
+      key : 999,
     };
 
-
+function isEmpty(val){
+      return (val === undefined || val == null || val.length <= 0) ? true : false;
+  }
+  // TODO : 
+function validateInput (myReq : IFormInputResource ) {
+  if ( isEmpty(myReq.title)  ){
+    return "Title is Empty!";
+  } else if  ( isEmpty(myReq.resourceType) || !(myReq.resourceType === "text")  ){
+    return "Resource Type is not Text!"; 
+  } else if (isEmpty(myReq.detailsText) || myReq.detailsText.length < 4 ){
+    return "Details Text is too short";
+  } 
+  return null;
+}
+  
   const ResourceDetails: React.FC<ResourceDetailsProps> = ({ mode, detailsId }) => {
     
     
 
-    const { handleSubmit, reset, control,  getValues  } = useForm<IFormInput>({
+    const { handleSubmit, reset, control,  getValues  } = useForm<IFormInputResource>({
       defaultValues: defaultValues,
     });
     
@@ -62,14 +68,26 @@
       
     }
     
-    const onFormSubmit: SubmitHandler<IFormInput> = (data) => {
-      alert('Submit data here ' + JSON.stringify
-        (data));
-      
-      console.log(data);
-      
+
+    const onFormSubmit: SubmitHandler<IFormInputResource> = (data) => {
+      //alert('Submit data here ' + JSON.stringify (data));
+      let validateRes = validateInput(data);
+      if ( validateRes ) {
+        alert(validateRes);
+      } else {
+         DataService.createContent(data)
+                    .then((res:ContentCreateResponse)  => {
+                      // Update Result list here
+                      console.log("BBB " + JSON.stringify(res));
+                      alert("Content Created!"); 
+                    }).catch((error :Error) => {
+                      // 
+                      alert("Server Error!"); 
+                      console.log("Error !");
+                    });
+            }
     }
-  
+    
     const onError = (errors) =>  { 
       //alert('error occurrs');
       console.log(errors);
@@ -84,7 +102,7 @@
       //setAge(event.target.value as string);
       console.log("handleResourceTypeChange " + event.target.value);
      //alert("handleResourceTypeChange " + event.target.value);
-      setMyResourceType(event.target.value);
+      //setMyResourceType(event.target.value);
     };
   
     return (
@@ -178,7 +196,6 @@
             placeholder="Maximum 100 rows"
             defaultValue=""
             style={{width:"100%"}}
-            disabled = {(myResourceType !== "text")}
           />}
           />
 
