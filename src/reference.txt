@@ -1,0 +1,18 @@
+React Hook forms : 
+https://react-hook-form.com/get-started 
+https://blog.logrocket.com/using-material-ui-with-react-hook-form/
+https://www.freecodecamp.org/news/how-to-create-forms-in-react-using-react-hook-form/
+
+MUI:
+https://mui.com/
+
+Useful Samples :
+https://github.com/theatypicaldeveloper/materialUi-in-react
+https://github.com/IsaacThaJunior/react-hook-form-and-mui/blob/main/src/form-components/FormInputText.tsx
+
+API Layer : 
+https://semaphoreci.com/blog/api-layer-react
+
+Redux: 
+https://redux.js.org/tutorials/essentials/part-1-overview-concepts
+
